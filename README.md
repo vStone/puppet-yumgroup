@@ -8,10 +8,27 @@ Dependencies
 
 If you are using puppet 2.6.x, you will need [puppetlabs-create_resources](https://github.com/puppetlabs/puppetlabs-create_resources)
 
+Issues
+------
+
+Currently, there is an issue with the order in which files are created. It may
+take several puppet runs before the file has been properly created.
+
+
 Examples
 --------
 
 The following example will re-create a CentOS-Base.repo file.
+
+    file { 'yum.repos.d' :
+      path    => '/etc/yum.repos.d',
+      ensure  => directory,
+      owner   => root,
+      group   => root,
+      mode    => 644,
+      recurse => true,
+      purge   => true,
+    }
 
     $centos_5_gpg_key = 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-5'
 
