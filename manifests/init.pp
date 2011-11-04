@@ -4,7 +4,9 @@
 #
 define yumgroup (
   $repos,
-  $target = undef
+  $target = undef,
+  $overrides = undef,
+  $method = 'create_resources'
 ) {
 
   $target_file = $target ? {
@@ -27,11 +29,19 @@ define yumgroup (
     require   => File["target-${name}"],
   }
 
-  yumgroup::defrepo {$name:
-    repos     => $repos,
-    require   => Yumgroup::Create_file[$repo_names],
+  case $method {
+    'create_resources': {
+      yumgroup::method::create_resources {$name:
+        repos     => $repos,
+        require   => Yumgroup::Create_file[$repo_names],
+      }
+    }
+    'yumrepo', default: {
+      yumgroup::method::yumrepo {$name:
+        repo_names => $repo_names,
+        require    => Yumgroup::Create_file[$repo_names],
+      }
+    }
   }
-
-  Yumgroup::Create_file<| |> -> Yumgroup::Defrepo <| |>
 
 }
