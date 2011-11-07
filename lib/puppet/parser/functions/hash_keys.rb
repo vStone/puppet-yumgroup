@@ -23,7 +23,7 @@ keys but just return the value (as an array) as it is.
     elsif arguments.is_a?(Hash)
       arguments.keys
     else
-      raise puppet::ParseError, "hash_keys(): Unexpected argument type."
+      raise Puppet::ParseError, "hash_keys(): Unexpected argument type."
     end
 
   end
